@@ -1,23 +1,32 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vscode-fav" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vscode-fav.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from vscode-fav!');
-	});
+	let disposable = vscode.languages.registerHoverProvider(
+		'json',
+		{
+			provideHover(document, position, token){
+				let manifest = JSON.parse(document.getText());
+				console.log('manifest => ', manifest)
+				let scripts = manifest.scripts;
+				console.log('scripts => ', scripts)
+				let lineAt = document.lineAt(position).text;
+				console.log('lineAt => ', lineAt)
+				let scriptAt = lineAt.split(':')[0].trim().replace(/"/g,"");
+				console.log('scriptAt => ', scriptAt)
+				if(scripts[scriptAt]){
+					const favCommandUri = vscode.Uri.parse(`command:vscode-fav.fav`);
+					const unFavCommandUri = vscode.Uri.parse(`command:vscode-fav.unfav`);
+					const favorited = false;
+					let contents = new vscode.MarkdownString(`[⭐](${favCommandUri})`);
+					if(favorited){
+						contents = new vscode.MarkdownString(`[🚫](${unFavCommandUri})`);
+					}
+					contents.isTrusted = true;
+					return new vscode.Hover(contents);
+				}
+			}
+		}
+	)
 
 	context.subscriptions.push(disposable);
 }

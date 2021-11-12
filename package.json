@@ -10,14 +10,19 @@
 		"Other"
 	],
 	"activationEvents": [
+		"onLanguage:json",
 		"onCommand:vscode-fav.helloWorld"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "vscode-fav.helloWorld",
-				"title": "Hello World"
+				"command": "vscode-fav.fav",
+				"title": "Favorite"
+			},
+			{
+				"command": "vscode-fav.unfav",
+				"title": "Unfavorite"
 			}
 		]
 	},
@@ -46,7 +51,6 @@
 		"type": "git",
 		"url": "git+https://github.com/LarryKiniu/vscode-fav.git"
 	  },
-	  "author": "Larry Kiniu",
 	  "license": "MIT",
 	  "bugs": {
 		"url": "https://github.com/LarryKiniu/vscode-fav/issues"
