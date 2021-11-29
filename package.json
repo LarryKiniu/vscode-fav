@@ -11,10 +11,18 @@
 	],
 	"activationEvents": [
 		"onLanguage:json",
-		"onCommand:vscode-fav.helloWorld"
+		"onView:vscodeFavorites"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"views": {
+			"explorer": [
+				{
+					"id": "vscodeFavorites",
+					"name": "⭐  Favorites"
+				}
+			]
+		},
 		"commands": [
 			{
 				"command": "vscode-fav.fav",
