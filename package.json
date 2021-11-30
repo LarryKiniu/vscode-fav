@@ -26,13 +26,41 @@
 		"commands": [
 			{
 				"command": "vscode-fav.fav",
-				"title": "Favorite"
+				"title": "⭐ Favorite"
 			},
 			{
 				"command": "vscode-fav.unfav",
-				"title": "Unfavorite"
+				"title": "❌ Remove"
+			},
+			{
+				"command": "vscode-fav.add",
+				"title": "➕ Add"
+			},
+			{
+				"command": "vscode-fav.run",
+				"title": "▶️"
 			}
-		]
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "vscode-fav.add",
+					"when": "view == vscodeFavorites",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "vscode-fav.run",
+					"when": "view == vscodeFavorites && viewItem == favorite",
+					"group": "inline"
+				},
+				{
+					"command": "vscode-fav.unfav",
+					"when": "view == vscodeFavorites && viewItem == favorite"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

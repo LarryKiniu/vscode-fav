@@ -10,7 +10,9 @@ export class FavoriteTreeItem extends vscode.TreeItem {
     }
 
     iconPath = {
-        light: path.join(__filename, '..', '..', 'resources', 'light', 'star.svg'),
-        dark: path.join(__filename, '..', '..', 'resources', 'dark', 'star.svg')
+        light: path.join(__filename, '..',  'resources', 'light', 'star.svg'),
+        dark: path.join(__filename, '..', 'resources', 'dark', 'star.svg')
     }
+
+    contextValue = 'favorite';
 }
