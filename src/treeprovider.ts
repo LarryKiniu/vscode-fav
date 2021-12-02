@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FavoriteTreeItem } from './FavoriteTreeItem';
+import { FavoriteTreeItem } from './treeitem';
 
 export class VSCodeFavProvider implements vscode.TreeDataProvider<FavoriteTreeItem>{
     constructor(private favorites: Object) {
