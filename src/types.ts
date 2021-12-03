@@ -8,5 +8,6 @@ export interface Favorites {
 export interface CommandHandlerInterface {
     favoritesProvider: VSCodeFavProvider,
     context: vscode.ExtensionContext,
-    favoritesKey: string
+    favoritesKey: string,
+    terminals: Map<string, vscode.Terminal>
 }

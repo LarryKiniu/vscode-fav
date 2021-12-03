@@ -61,3 +61,23 @@ export function hoverProvider(){
         }
     )
 }
+
+export function executeScriptOrCommand(favorite: string | FavoriteTreeItem){
+    let { terminals } = commandHandlerParams;
+    let scriptName: string = typeof favorite === 'string' ? favorite : favorite.label; 
+    if(favorites.hasOwnProperty(scriptName)){
+        const script = favorites[scriptName];
+        const command: string = `npm run ${script}`;
+        let terminal: vscode.Terminal | undefined;
+        if(terminals.has(scriptName)){
+            terminal = terminals.get(scriptName);
+        } else {
+            terminal = vscode.window.createTerminal();
+            terminals.set(scriptName, terminal)
+        }
+        if(terminal){
+            terminal.show();
+            terminal.sendText(command);
+        }
+    }
+}
