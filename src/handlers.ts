@@ -23,7 +23,6 @@ export function favCommandHandler(scriptName: string, executable: string) {
 
 export function unFavCommandHandler(favorite: string | FavoriteTreeItem) {
     let scriptName: string = typeof favorite === 'string' ? favorite : favorite.label;  
-    console.log('scriptName => ', scriptName)
     const { favoritesProvider, context, favoritesKey } = commandHandlerParams;
     if(favorites.hasOwnProperty(scriptName)){
         const favObject = favorites;
@@ -67,17 +66,46 @@ export function executeScriptOrCommand(favorite: string | FavoriteTreeItem){
     let scriptName: string = typeof favorite === 'string' ? favorite : favorite.label; 
     if(favorites.hasOwnProperty(scriptName)){
         const script = favorites[scriptName];
-        const command: string = `npm run ${script}`;
+        const isCommand = script.split(' ').length > 1;
+        const command: string = isCommand ? script : `npm run ${script}`;
         let terminal: vscode.Terminal | undefined;
         if(terminals.has(scriptName)){
             terminal = terminals.get(scriptName);
         } else {
-            terminal = vscode.window.createTerminal();
-            terminals.set(scriptName, terminal)
+            terminal = vscode.window.createTerminal(scriptName);
+            terminals.set(scriptName, terminal);
         }
         if(terminal){
             terminal.show();
             terminal.sendText(command);
         }
     }
+}
+
+export function addCommandHandler(){
+    console.log('creating an input box');
+    let commandTitle: string = '';
+    let commandScript: string = '';
+    const titleInput: vscode.InputBox = vscode.window.createInputBox();
+    const scriptInput: vscode.InputBox = vscode.window.createInputBox();
+    titleInput.title = '1. Title';
+    scriptInput.title = '2. command to be executed';
+    titleInput.show();
+    titleInput.onDidAccept( e => {
+        console.log(titleInput.value);
+        commandTitle = titleInput.value;
+        titleInput.hide();
+        titleInput.dispose();
+    });
+    titleInput.onDidHide( e => {
+        scriptInput.show();
+    });
+
+    scriptInput.onDidAccept( e => {
+        console.log(scriptInput.value);
+        commandScript = scriptInput.value;
+        scriptInput.hide();
+        scriptInput.dispose();
+        favCommandHandler(commandTitle,commandScript);
+    })
 }
