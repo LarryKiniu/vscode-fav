@@ -9,8 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 		terminals.delete(term.name)
 	});
 	const favoritesKey = 'vscode-fav.favorites';
-	context.globalState.setKeysForSync([favoritesKey]);
-	const favStorage = <string>context.globalState.get(favoritesKey);
+	const favStorage = <string>context.workspaceState.get(favoritesKey);
 	let favorites: Favorites = favStorage !== undefined ? JSON.parse(JSON.stringify(favStorage)) : {};
 	const favoritesProvider = new VSCodeFavProvider(favorites);
 	
