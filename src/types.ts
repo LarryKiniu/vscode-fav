@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { VSCodeFavProvider } from './treeprovider';
 
 export interface Favorites {
-    [key: string]: string
+    [key: string]: {type: string, executable: string}
 }
 
 export interface CommandHandlerInterface {

@@ -9,11 +9,14 @@ export function setCommandhandlerParams(params: CommandHandlerInterface, favorit
     commandHandlerParams = params;
     favorites = favoritesParam;
 };
-export function favCommandHandler(scriptName: string, executable: string) {
+export function favCommandHandler(scriptName: string, executable: string, type: string) {
     let { favoritesProvider, context, favoritesKey} = commandHandlerParams;
     if(!(favorites.hasOwnProperty(scriptName))){
-        favorites[scriptName] = executable;
-        context.globalState.update(favoritesKey,favorites);
+        favorites[scriptName] = {
+            type: type,
+            executable: executable
+        };
+        context.workspaceState.update(favoritesKey,favorites);
         favoritesProvider.refresh();
         vscode.window.showInformationMessage(`✅ ${scriptName} has been added to favorites.`);
     } else {
@@ -45,7 +48,7 @@ export function hoverProvider(){
                 let lineAt = document.lineAt(position).text;
                 let scriptAt = lineAt.split(':')[0].trim().replace(/"/g,"");
                 if(scripts[scriptAt]){
-                    const args = [scriptAt, scriptAt];
+                    const args = [scriptAt, scriptAt, 'script'];
                     const favCommandUri = vscode.Uri.parse(`command:vscode-fav.fav?${encodeURIComponent(JSON.stringify(args))}`);
                     const unFavCommandUri = vscode.Uri.parse(`command:vscode-fav.unfav?${encodeURIComponent(JSON.stringify(args))}`);
                     const favorited = favorites && favorites.hasOwnProperty(scriptAt);
@@ -66,8 +69,8 @@ export function executeScriptOrCommand(favorite: string | FavoriteTreeItem){
     let scriptName: string = typeof favorite === 'string' ? favorite : favorite.label; 
     if(favorites.hasOwnProperty(scriptName)){
         const script = favorites[scriptName];
-        const isCommand = script.split(' ').length > 1;
-        const command: string = isCommand ? script : `npm run ${script}`;
+        const isCommand = script.type === 'command' ? true : false;
+        const command: string = isCommand ? script.executable : `npm run ${script.executable}`;
         let terminal: vscode.Terminal | undefined;
         if(terminals.has(scriptName)){
             terminal = terminals.get(scriptName);
@@ -106,6 +109,6 @@ export function addCommandHandler(){
         commandScript = scriptInput.value;
         scriptInput.hide();
         scriptInput.dispose();
-        favCommandHandler(commandTitle,commandScript);
+        favCommandHandler(commandTitle,commandScript, 'command');
     })
 }
