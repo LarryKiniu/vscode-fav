@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 import { FavoriteTreeItem } from './treeitem';
 import { CommandHandlerInterface, Favorites } from './types';
 let commandHandlerParams: CommandHandlerInterface;
@@ -66,11 +68,12 @@ export function hoverProvider(){
 
 export function executeScriptOrCommand(favorite: string | FavoriteTreeItem){
     let { terminals } = commandHandlerParams;
-    let scriptName: string = typeof favorite === 'string' ? favorite : favorite.label; 
+    let scriptName: string = typeof favorite === 'string' ? favorite : favorite.label;
+    let runner = setScriptRunner(); 
     if(favorites.hasOwnProperty(scriptName)){
         const script = favorites[scriptName];
         const isCommand = script.type === 'command' ? true : false;
-        const command: string = isCommand ? script.executable : `npm run ${script.executable}`;
+        const command: string = isCommand ? script.executable : `${runner} ${script.executable}`;
         let terminal: vscode.Terminal | undefined;
         if(terminals.has(scriptName)){
             terminal = terminals.get(scriptName);
@@ -111,4 +114,21 @@ export function addCommandHandler(){
         scriptInput.dispose();
         favCommandHandler(commandTitle,commandScript, 'command');
     })
+}
+
+export function setScriptRunner(){
+    let runner = 'npm run';
+    if(vscode.workspace.workspaceFolders){
+        let rootFolder = vscode.workspace.workspaceFolders[0].uri.path;
+        let yarnLockFile = path.join(rootFolder, 'yarn.lock');
+        let pnpmFile = path.join(rootFolder, 'pnpm-workspace.yaml');
+        if(fs.existsSync(yarnLockFile)){
+            runner = 'yarn';
+        }
+        if(fs.existsSync(pnpmFile)){
+            runner = 'pnpm';
+        }
+    }
+
+    return runner;
 }
