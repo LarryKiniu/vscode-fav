@@ -2,7 +2,7 @@
 	"name": "vscode-fav",
 	"displayName": "vscode-fav",
 	"description": "A VS Code extension to favorite most used scripts in package.json and run them by clicking a button",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.62.0"
 	},
