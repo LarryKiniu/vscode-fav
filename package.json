@@ -23,6 +23,12 @@
 				}
 			]
 		},
+		"viewsWelcome": [
+			{
+			  "view": "vscodeFavorites",
+			  "contents": "No scripts or commands found .\n[➕ Add](command:vscode-fav.add)"
+			}
+		  ],
 		"commands": [
 			{
 				"command": "vscode-fav.fav",
