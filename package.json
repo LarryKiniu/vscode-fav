@@ -4,7 +4,7 @@
 	"description": "A VS Code extension to favorite most used scripts in package.json and run them by clicking a button",
 	"version": "1.0.0",
 	"publisher": "LarryKiniu",
-	"icon": "https://github.com/LarryKiniu/vscode-fav/favorite-icon.png",
+	"icon": "favorite-icon.png",
 	"engines": {
 		"vscode": "^1.62.0"
 	},
